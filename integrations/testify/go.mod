@@ -1,4 +1,4 @@
-module github.com/rad12000/go-smartmock/testify
+module github.com/rad12000/go-smartmock/integrations/testify
 
 go 1.21
 
