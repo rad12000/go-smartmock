@@ -51,6 +51,9 @@ var (
 	minReturn uint
 	maxArg    uint
 	maxReturn uint
+	bufPool   = sync.Pool{New: func() any {
+		return &bytes.Buffer{}
+	}}
 )
 
 type templateData struct {
@@ -107,7 +110,7 @@ func main() {
 		}
 	}
 
-	w := threadSafeWriter{w: file, mu: &sync.Mutex{}, buf: &bytes.Buffer{}}
+	w := newThreadSafeWriter(file)
 	err = parseTmpl.ExecuteTemplate(w, "generate", tmplData)
 	_, err2 := w.flush()
 	if err := errors.Join(err, err2); err != nil {
@@ -142,6 +145,14 @@ func main() {
 	fmt.Println("Created", (maxArg+1)*(maxReturn+1)*2, "functions")
 }
 
+func newThreadSafeWriter(w io.Writer) threadSafeWriter {
+	return threadSafeWriter{
+		w:   w,
+		mu:  &sync.Mutex{},
+		buf: bufPool.Get().(*bytes.Buffer),
+	}
+}
+
 type threadSafeWriter struct {
 	w   io.Writer
 	mu  *sync.Mutex
@@ -153,11 +164,15 @@ func (w threadSafeWriter) Write(b []byte) (int, error) {
 }
 
 func (w threadSafeWriter) clone() threadSafeWriter {
-	w.buf = &bytes.Buffer{}
+	w.buf = bufPool.Get().(*bytes.Buffer)
 	return w
 }
 
 func (w threadSafeWriter) flush() (int64, error) {
+	defer func() {
+		w.buf.Reset()
+		bufPool.Put(w.buf)
+	}()
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	return w.buf.WriteTo(w.w)
