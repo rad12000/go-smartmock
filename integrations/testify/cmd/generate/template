@@ -104,10 +104,7 @@ type __on{{template "genericArgsAny" .}} struct {
 func (o __on{{template "genericArgs" .}}) Called({{template "methodParams" .GenericParams}}){{if len .GenericReturns}} ({{template "join" .GenericReturns}}){{end}} {
 	{{if len .GenericReturns}}args := {{end}}o.mock.MethodCalled(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLower" .GenericParams}})
 	{{- range $idx, $val := .GenericReturns}}
-    r{{$idx}}, ok := args.Get({{$idx}}).({{$val}})
-    if !ok && r{{$idx}} != nil {
-        panic(fmt.Sprintf("expected mock return value at index {{$idx}} to be of type %T, but got type %T", r{{$idx}}, args.Get({{$idx}})))
-    }
+    r{{$idx}}, _ := args.Get({{$idx}}).({{$val}})
     {{end -}}
     {{- if len .GenericReturns}}
 	return {{range $idx, $val := .GenericReturns}}r{{$idx}}{{if lt $idx (minusOne (len $.GenericReturns))}}, {{end}}{{end -}}
@@ -143,12 +140,8 @@ func (c *__call{{template "genericArgs" .}}) Return({{template "methodParams" .G
 func (c *__call{{template "genericArgs" .}}) Run(fn func({{template "join" .GenericParams}})) *__call{{template "genericArgs" .}} {
 	c.Call.Run(func(args mock.Arguments) {
 	    {{- range $idx, $val := .GenericParams}}
-        arg{{$idx}}, ok := args.Get({{$idx}}).({{$val}})
-        if !ok && arg{{$idx}} != nil {
-            panic(fmt.Sprintf("expected mock argument at index {{$idx}} to be of type %T, but got type %T", arg{{$idx}}, args.Get({{$idx}})))
-        }
+        arg{{$idx}}, _ := args.Get({{$idx}}).({{$val}})
 	    {{end -}}
-
 
 		fn({{range $idx, $val := .GenericParams}}arg{{$idx}}{{if lt $idx (minusOne (len $.GenericParams))}},{{end}}{{end}})
 	})
