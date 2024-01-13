@@ -105,10 +105,10 @@ func (o __on{{template "genericArgs" .}}) Called({{template "methodParams" .Gene
 	{{if len .GenericReturns}}args := {{end}}o.mock.MethodCalled(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLower" .GenericParams}})
 	{{- range $idx, $val := .GenericReturns}}
     r{{$idx}}, _ := args.Get({{$idx}}).({{$val}})
-    {{end -}}
+    {{- end -}}
     {{- if len .GenericReturns}}
-	return {{range $idx, $val := .GenericReturns}}r{{$idx}}{{if lt $idx (minusOne (len $.GenericReturns))}}, {{end}}{{end -}}
-	{{end}}
+	return {{range $idx, $val := .GenericReturns}}r{{$idx}}{{if lt $idx (minusOne (len $.GenericReturns))}}, {{end}}{{end}}
+	{{- end}}
 }
 
 // On is used to specify the exact arguments that the previously specified function should expect to receive.
@@ -139,10 +139,9 @@ func (c *__call{{template "genericArgs" .}}) Return({{template "methodParams" .G
 // Run works the same as [mock.Call.Run], just with strong typing.
 func (c *__call{{template "genericArgs" .}}) Run(fn func({{template "join" .GenericParams}})) *__call{{template "genericArgs" .}} {
 	c.Call.Run(func(args mock.Arguments) {
-	    {{- range $idx, $val := .GenericParams}}
+	    {{range $idx, $val := .GenericParams -}}
         arg{{$idx}}, _ := args.Get({{$idx}}).({{$val}})
 	    {{end -}}
-
 		fn({{range $idx, $val := .GenericParams}}arg{{$idx}}{{if lt $idx (minusOne (len $.GenericParams))}},{{end}}{{end}})
 	})
 	return c
