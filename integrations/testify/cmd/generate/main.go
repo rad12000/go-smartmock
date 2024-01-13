@@ -23,12 +23,18 @@ The flags are:
 package main
 
 import (
+	"bytes"
 	_ "embed"
+	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
+	"runtime"
 	"strings"
+	"sync"
 	"text/template"
+	"time"
 )
 
 var (
@@ -62,6 +68,10 @@ type mockFn struct {
 }
 
 func main() {
+	t := time.Now()
+	defer func() {
+		fmt.Println("Took", time.Since(t).Milliseconds(), "ms")
+	}()
 	flag.UintVar(&minArg, "minArg", 0, "The minimum number of arguments to generate.")
 	flag.UintVar(&minReturn, "minReturn", 0, "The minimum number of return arguments to generate.")
 	flag.UintVar(&maxArg, "maxArg", 0, "The max number of arguments to generate.")
@@ -97,8 +107,58 @@ func main() {
 		}
 	}
 
-	err = parseTmpl.ExecuteTemplate(file, "generate", tmplData)
-	if err != nil {
+	w := threadSafeWriter{w: file, mu: &sync.Mutex{}, buf: &bytes.Buffer{}}
+	err = parseTmpl.ExecuteTemplate(w, "generate", tmplData)
+	_, err2 := w.flush()
+	if err := errors.Join(err, err2); err != nil {
 		panic(err)
 	}
+
+	numCPU := runtime.NumCPU() - 1
+	if numCPU < 1 {
+		numCPU = 1
+	}
+
+	ch := make(chan struct{}, numCPU)
+	var wg sync.WaitGroup
+	for _, fn := range tmplData.Funcs {
+		ch <- struct{}{}
+		wg.Add(1)
+		go func(fn mockFn) {
+			defer func() {
+				wg.Done()
+				<-ch
+			}()
+
+			w := w.clone()
+			err := parseTmpl.ExecuteTemplate(w, "smartFunc", fn)
+			_, err2 := w.flush()
+			if err := errors.Join(err, err2); err != nil {
+				panic(err)
+			}
+		}(fn)
+	}
+	wg.Wait()
+	fmt.Println("Created", (maxArg+1)*(maxReturn+1)*2, "functions")
+}
+
+type threadSafeWriter struct {
+	w   io.Writer
+	mu  *sync.Mutex
+	buf *bytes.Buffer
+}
+
+func (w threadSafeWriter) Write(b []byte) (int, error) {
+	return w.buf.Write(b)
+}
+
+func (w threadSafeWriter) clone() threadSafeWriter {
+	w.buf = &bytes.Buffer{}
+	return w
+}
+
+func (w threadSafeWriter) flush() (int64, error) {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	return w.buf.WriteTo(w.w)
 }

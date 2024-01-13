@@ -75,7 +75,18 @@ func Eq[T any](v T) matcher[T] {
 	})
 }
 
-{{- range $funcIdx, $func := .Funcs}}
+func __funcName(methodOrFunc any) string {
+	name := runtime.FuncForPC(reflect.ValueOf(methodOrFunc).Pointer()).Name()
+	lastIndexOfDot := strings.LastIndex(name, ".")
+	name = name[lastIndexOfDot+1:]
+	dashIndex := strings.IndexRune(name, '-')
+	if dashIndex > -1 { // Handles the name of a method on a struct
+		name = name[:dashIndex]
+	}
+	return name
+}
+
+{{- define "smartFunc"}}
 // Fn{{len .GenericParams}}x{{len .GenericReturns}} is a helper function to create a mock for a function that takes {{len .GenericParams}} parameters and returns {{len .GenericReturns}} values.
 func Fn{{template "genericArgsAny" .}}(mock __testifyMock, fnBeingMocked func({{template "join" .GenericParams}}){{if len .GenericReturns}} ({{template "join" .GenericReturns}}){{end}}) __on{{template "genericArgs" .}} {
 	return __on{{template "genericArgs" .}}{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -122,19 +133,8 @@ func (c *__call{{template "genericArgs" .}}) Run(fn func({{template "join" .Gene
 	    {{end -}}
 
 
-		fn({{range $idx, $val := .GenericParams}}arg{{$idx}}{{if lt $idx (minusOne (len $func.GenericParams))}},{{end}}{{end}})
+		fn({{range $idx, $val := .GenericParams}}arg{{$idx}}{{if lt $idx (minusOne (len $.GenericParams))}},{{end}}{{end}})
 	})
 	return c
 }
 {{end -}}
-
-func __funcName(methodOrFunc any) string {
-	name := runtime.FuncForPC(reflect.ValueOf(methodOrFunc).Pointer()).Name()
-	lastIndexOfDot := strings.LastIndex(name, ".")
-	name = name[lastIndexOfDot+1:]
-	dashIndex := strings.IndexRune(name, '-')
-	if dashIndex > -1 { // Handles the name of a method on a struct
-		name = name[:dashIndex]
-	}
-	return name
-}

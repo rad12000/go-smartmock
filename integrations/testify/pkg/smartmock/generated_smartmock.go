@@ -39,6 +39,17 @@ func Eq[T any](v T) matcher[T] {
 		return v
 	})
 }
+
+func __funcName(methodOrFunc any) string {
+	name := runtime.FuncForPC(reflect.ValueOf(methodOrFunc).Pointer()).Name()
+	lastIndexOfDot := strings.LastIndex(name, ".")
+	name = name[lastIndexOfDot+1:]
+	dashIndex := strings.IndexRune(name, '-')
+	if dashIndex > -1 { // Handles the name of a method on a struct
+		name = name[:dashIndex]
+	}
+	return name
+}
 // Fn0x0 is a helper function to create a mock for a function that takes 0 parameters and returns 0 values.
 func Fn0x0(mock __testifyMock, fnBeingMocked func()) __on0x0 {
 	return __on0x0{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -123,268 +134,6 @@ func (c *__call0x1[R0]) Run(fn func()) *__call0x1[R0] {
 	return c
 }
 
-// Fn0x2 is a helper function to create a mock for a function that takes 0 parameters and returns 2 values.
-func Fn0x2[R0, R1 any](mock __testifyMock, fnBeingMocked func() (R0, R1)) __on0x2[R0, R1] {
-	return __on0x2[R0, R1]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on0x2[R0, R1 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on0x2[R0, R1]) On() *__call0x2[R0, R1] {
-	call := o.mock.On(o.funcName)
-	return &__call0x2[R0, R1]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on0x2[R0, R1]) Match() *__call0x2[R0, R1] {
-	call := o.mock.On(o.funcName)
-	return &__call0x2[R0, R1]{Call: call}
-}
-
-type __call0x2[R0, R1 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call0x2[R0, R1]) Return(r0 R0, r1 R1) *__call0x2[R0, R1] {
-	c.Call.Return(r0, r1)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call0x2[R0, R1]) Run(fn func()) *__call0x2[R0, R1] {
-	c.Call.Run(func(args mock.Arguments) {fn()
-	})
-	return c
-}
-
-// Fn0x3 is a helper function to create a mock for a function that takes 0 parameters and returns 3 values.
-func Fn0x3[R0, R1, R2 any](mock __testifyMock, fnBeingMocked func() (R0, R1, R2)) __on0x3[R0, R1, R2] {
-	return __on0x3[R0, R1, R2]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on0x3[R0, R1, R2 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on0x3[R0, R1, R2]) On() *__call0x3[R0, R1, R2] {
-	call := o.mock.On(o.funcName)
-	return &__call0x3[R0, R1, R2]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on0x3[R0, R1, R2]) Match() *__call0x3[R0, R1, R2] {
-	call := o.mock.On(o.funcName)
-	return &__call0x3[R0, R1, R2]{Call: call}
-}
-
-type __call0x3[R0, R1, R2 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call0x3[R0, R1, R2]) Return(r0 R0, r1 R1, r2 R2) *__call0x3[R0, R1, R2] {
-	c.Call.Return(r0, r1, r2)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call0x3[R0, R1, R2]) Run(fn func()) *__call0x3[R0, R1, R2] {
-	c.Call.Run(func(args mock.Arguments) {fn()
-	})
-	return c
-}
-
-// Fn0x4 is a helper function to create a mock for a function that takes 0 parameters and returns 4 values.
-func Fn0x4[R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func() (R0, R1, R2, R3)) __on0x4[R0, R1, R2, R3] {
-	return __on0x4[R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on0x4[R0, R1, R2, R3 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on0x4[R0, R1, R2, R3]) On() *__call0x4[R0, R1, R2, R3] {
-	call := o.mock.On(o.funcName)
-	return &__call0x4[R0, R1, R2, R3]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on0x4[R0, R1, R2, R3]) Match() *__call0x4[R0, R1, R2, R3] {
-	call := o.mock.On(o.funcName)
-	return &__call0x4[R0, R1, R2, R3]{Call: call}
-}
-
-type __call0x4[R0, R1, R2, R3 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call0x4[R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__call0x4[R0, R1, R2, R3] {
-	c.Call.Return(r0, r1, r2, r3)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call0x4[R0, R1, R2, R3]) Run(fn func()) *__call0x4[R0, R1, R2, R3] {
-	c.Call.Run(func(args mock.Arguments) {fn()
-	})
-	return c
-}
-
-// Fn0x5 is a helper function to create a mock for a function that takes 0 parameters and returns 5 values.
-func Fn0x5[R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func() (R0, R1, R2, R3, R4)) __on0x5[R0, R1, R2, R3, R4] {
-	return __on0x5[R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on0x5[R0, R1, R2, R3, R4 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on0x5[R0, R1, R2, R3, R4]) On() *__call0x5[R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName)
-	return &__call0x5[R0, R1, R2, R3, R4]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on0x5[R0, R1, R2, R3, R4]) Match() *__call0x5[R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName)
-	return &__call0x5[R0, R1, R2, R3, R4]{Call: call}
-}
-
-type __call0x5[R0, R1, R2, R3, R4 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call0x5[R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call0x5[R0, R1, R2, R3, R4] {
-	c.Call.Return(r0, r1, r2, r3, r4)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call0x5[R0, R1, R2, R3, R4]) Run(fn func()) *__call0x5[R0, R1, R2, R3, R4] {
-	c.Call.Run(func(args mock.Arguments) {fn()
-	})
-	return c
-}
-
-// Fn1x0 is a helper function to create a mock for a function that takes 1 parameters and returns 0 values.
-func Fn1x0[P0 any](mock __testifyMock, fnBeingMocked func(P0)) __on1x0[P0] {
-	return __on1x0[P0]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on1x0[P0 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on1x0[P0]) On(p0 P0) *__call1x0[P0] {
-	call := o.mock.On(o.funcName, p0)
-	return &__call1x0[P0]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on1x0[P0]) Match(p0 matcher[P0]) *__call1x0[P0] {
-	call := o.mock.On(o.funcName, p0.match())
-	return &__call1x0[P0]{Call: call}
-}
-
-type __call1x0[P0 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call1x0[P0]) Return() *__call1x0[P0] {
-	c.Call.Return()
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call1x0[P0]) Run(fn func(P0)) *__call1x0[P0] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    fn(arg0)
-	})
-	return c
-}
-
-// Fn1x1 is a helper function to create a mock for a function that takes 1 parameters and returns 1 values.
-func Fn1x1[P0, R0 any](mock __testifyMock, fnBeingMocked func(P0) (R0)) __on1x1[P0, R0] {
-	return __on1x1[P0, R0]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on1x1[P0, R0 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on1x1[P0, R0]) On(p0 P0) *__call1x1[P0, R0] {
-	call := o.mock.On(o.funcName, p0)
-	return &__call1x1[P0, R0]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on1x1[P0, R0]) Match(p0 matcher[P0]) *__call1x1[P0, R0] {
-	call := o.mock.On(o.funcName, p0.match())
-	return &__call1x1[P0, R0]{Call: call}
-}
-
-type __call1x1[P0, R0 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call1x1[P0, R0]) Return(r0 R0) *__call1x1[P0, R0] {
-	c.Call.Return(r0)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call1x1[P0, R0]) Run(fn func(P0)) *__call1x1[P0, R0] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    fn(arg0)
-	})
-	return c
-}
-
 // Fn1x2 is a helper function to create a mock for a function that takes 1 parameters and returns 2 values.
 func Fn1x2[P0, R0, R1 any](mock __testifyMock, fnBeingMocked func(P0) (R0, R1)) __on1x2[P0, R0, R1] {
 	return __on1x2[P0, R0, R1]{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -428,6 +177,48 @@ func (c *__call1x2[P0, R0, R1]) Run(fn func(P0)) *__call1x2[P0, R0, R1] {
             panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
         }
 	    fn(arg0)
+	})
+	return c
+}
+
+// Fn0x4 is a helper function to create a mock for a function that takes 0 parameters and returns 4 values.
+func Fn0x4[R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func() (R0, R1, R2, R3)) __on0x4[R0, R1, R2, R3] {
+	return __on0x4[R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on0x4[R0, R1, R2, R3 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on0x4[R0, R1, R2, R3]) On() *__call0x4[R0, R1, R2, R3] {
+	call := o.mock.On(o.funcName)
+	return &__call0x4[R0, R1, R2, R3]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on0x4[R0, R1, R2, R3]) Match() *__call0x4[R0, R1, R2, R3] {
+	call := o.mock.On(o.funcName)
+	return &__call0x4[R0, R1, R2, R3]{Call: call}
+}
+
+type __call0x4[R0, R1, R2, R3 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call0x4[R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__call0x4[R0, R1, R2, R3] {
+	c.Call.Return(r0, r1, r2, r3)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call0x4[R0, R1, R2, R3]) Run(fn func()) *__call0x4[R0, R1, R2, R3] {
+	c.Call.Run(func(args mock.Arguments) {fn()
 	})
 	return c
 }
@@ -479,6 +270,95 @@ func (c *__call1x3[P0, R0, R1, R2]) Run(fn func(P0)) *__call1x3[P0, R0, R1, R2] 
 	return c
 }
 
+// Fn1x0 is a helper function to create a mock for a function that takes 1 parameters and returns 0 values.
+func Fn1x0[P0 any](mock __testifyMock, fnBeingMocked func(P0)) __on1x0[P0] {
+	return __on1x0[P0]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on1x0[P0 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on1x0[P0]) On(p0 P0) *__call1x0[P0] {
+	call := o.mock.On(o.funcName, p0)
+	return &__call1x0[P0]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on1x0[P0]) Match(p0 matcher[P0]) *__call1x0[P0] {
+	call := o.mock.On(o.funcName, p0.match())
+	return &__call1x0[P0]{Call: call}
+}
+
+type __call1x0[P0 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call1x0[P0]) Return() *__call1x0[P0] {
+	c.Call.Return()
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call1x0[P0]) Run(fn func(P0)) *__call1x0[P0] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    fn(arg0)
+	})
+	return c
+}
+
+// Fn0x2 is a helper function to create a mock for a function that takes 0 parameters and returns 2 values.
+func Fn0x2[R0, R1 any](mock __testifyMock, fnBeingMocked func() (R0, R1)) __on0x2[R0, R1] {
+	return __on0x2[R0, R1]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on0x2[R0, R1 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on0x2[R0, R1]) On() *__call0x2[R0, R1] {
+	call := o.mock.On(o.funcName)
+	return &__call0x2[R0, R1]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on0x2[R0, R1]) Match() *__call0x2[R0, R1] {
+	call := o.mock.On(o.funcName)
+	return &__call0x2[R0, R1]{Call: call}
+}
+
+type __call0x2[R0, R1 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call0x2[R0, R1]) Return(r0 R0, r1 R1) *__call0x2[R0, R1] {
+	c.Call.Return(r0, r1)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call0x2[R0, R1]) Run(fn func()) *__call0x2[R0, R1] {
+	c.Call.Run(func(args mock.Arguments) {fn()
+	})
+	return c
+}
+
 // Fn1x4 is a helper function to create a mock for a function that takes 1 parameters and returns 4 values.
 func Fn1x4[P0, R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func(P0) (R0, R1, R2, R3)) __on1x4[P0, R0, R1, R2, R3] {
 	return __on1x4[P0, R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -516,53 +396,6 @@ func (c *__call1x4[P0, R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__ca
 
 // Run works the same as [mock.Call.Run], just with strong typing.
 func (c *__call1x4[P0, R0, R1, R2, R3]) Run(fn func(P0)) *__call1x4[P0, R0, R1, R2, R3] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    fn(arg0)
-	})
-	return c
-}
-
-// Fn1x5 is a helper function to create a mock for a function that takes 1 parameters and returns 5 values.
-func Fn1x5[P0, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0) (R0, R1, R2, R3, R4)) __on1x5[P0, R0, R1, R2, R3, R4] {
-	return __on1x5[P0, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on1x5[P0, R0, R1, R2, R3, R4 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on1x5[P0, R0, R1, R2, R3, R4]) On(p0 P0) *__call1x5[P0, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0)
-	return &__call1x5[P0, R0, R1, R2, R3, R4]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on1x5[P0, R0, R1, R2, R3, R4]) Match(p0 matcher[P0]) *__call1x5[P0, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0.match())
-	return &__call1x5[P0, R0, R1, R2, R3, R4]{Call: call}
-}
-
-type __call1x5[P0, R0, R1, R2, R3, R4 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call1x5[P0, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call1x5[P0, R0, R1, R2, R3, R4] {
-	c.Call.Return(r0, r1, r2, r3, r4)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call1x5[P0, R0, R1, R2, R3, R4]) Run(fn func(P0)) *__call1x5[P0, R0, R1, R2, R3, R4] {
 	c.Call.Run(func(args mock.Arguments) {
         arg0, ok := args.Get(0).(P0)
         if !ok {
@@ -625,6 +458,100 @@ func (c *__call2x0[P0, P1]) Run(fn func(P0, P1)) *__call2x0[P0, P1] {
 	return c
 }
 
+// Fn1x1 is a helper function to create a mock for a function that takes 1 parameters and returns 1 values.
+func Fn1x1[P0, R0 any](mock __testifyMock, fnBeingMocked func(P0) (R0)) __on1x1[P0, R0] {
+	return __on1x1[P0, R0]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on1x1[P0, R0 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on1x1[P0, R0]) On(p0 P0) *__call1x1[P0, R0] {
+	call := o.mock.On(o.funcName, p0)
+	return &__call1x1[P0, R0]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on1x1[P0, R0]) Match(p0 matcher[P0]) *__call1x1[P0, R0] {
+	call := o.mock.On(o.funcName, p0.match())
+	return &__call1x1[P0, R0]{Call: call}
+}
+
+type __call1x1[P0, R0 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call1x1[P0, R0]) Return(r0 R0) *__call1x1[P0, R0] {
+	c.Call.Return(r0)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call1x1[P0, R0]) Run(fn func(P0)) *__call1x1[P0, R0] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    fn(arg0)
+	})
+	return c
+}
+
+// Fn1x5 is a helper function to create a mock for a function that takes 1 parameters and returns 5 values.
+func Fn1x5[P0, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0) (R0, R1, R2, R3, R4)) __on1x5[P0, R0, R1, R2, R3, R4] {
+	return __on1x5[P0, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on1x5[P0, R0, R1, R2, R3, R4 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on1x5[P0, R0, R1, R2, R3, R4]) On(p0 P0) *__call1x5[P0, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0)
+	return &__call1x5[P0, R0, R1, R2, R3, R4]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on1x5[P0, R0, R1, R2, R3, R4]) Match(p0 matcher[P0]) *__call1x5[P0, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0.match())
+	return &__call1x5[P0, R0, R1, R2, R3, R4]{Call: call}
+}
+
+type __call1x5[P0, R0, R1, R2, R3, R4 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call1x5[P0, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call1x5[P0, R0, R1, R2, R3, R4] {
+	c.Call.Return(r0, r1, r2, r3, r4)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call1x5[P0, R0, R1, R2, R3, R4]) Run(fn func(P0)) *__call1x5[P0, R0, R1, R2, R3, R4] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    fn(arg0)
+	})
+	return c
+}
+
 // Fn2x1 is a helper function to create a mock for a function that takes 2 parameters and returns 1 values.
 func Fn2x1[P0, P1, R0 any](mock __testifyMock, fnBeingMocked func(P0, P1) (R0)) __on2x1[P0, P1, R0] {
 	return __on2x1[P0, P1, R0]{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -673,6 +600,90 @@ func (c *__call2x1[P0, P1, R0]) Run(fn func(P0, P1)) *__call2x1[P0, P1, R0] {
             panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
         }
 	    fn(arg0,arg1)
+	})
+	return c
+}
+
+// Fn0x5 is a helper function to create a mock for a function that takes 0 parameters and returns 5 values.
+func Fn0x5[R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func() (R0, R1, R2, R3, R4)) __on0x5[R0, R1, R2, R3, R4] {
+	return __on0x5[R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on0x5[R0, R1, R2, R3, R4 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on0x5[R0, R1, R2, R3, R4]) On() *__call0x5[R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName)
+	return &__call0x5[R0, R1, R2, R3, R4]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on0x5[R0, R1, R2, R3, R4]) Match() *__call0x5[R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName)
+	return &__call0x5[R0, R1, R2, R3, R4]{Call: call}
+}
+
+type __call0x5[R0, R1, R2, R3, R4 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call0x5[R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call0x5[R0, R1, R2, R3, R4] {
+	c.Call.Return(r0, r1, r2, r3, r4)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call0x5[R0, R1, R2, R3, R4]) Run(fn func()) *__call0x5[R0, R1, R2, R3, R4] {
+	c.Call.Run(func(args mock.Arguments) {fn()
+	})
+	return c
+}
+
+// Fn0x3 is a helper function to create a mock for a function that takes 0 parameters and returns 3 values.
+func Fn0x3[R0, R1, R2 any](mock __testifyMock, fnBeingMocked func() (R0, R1, R2)) __on0x3[R0, R1, R2] {
+	return __on0x3[R0, R1, R2]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on0x3[R0, R1, R2 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on0x3[R0, R1, R2]) On() *__call0x3[R0, R1, R2] {
+	call := o.mock.On(o.funcName)
+	return &__call0x3[R0, R1, R2]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on0x3[R0, R1, R2]) Match() *__call0x3[R0, R1, R2] {
+	call := o.mock.On(o.funcName)
+	return &__call0x3[R0, R1, R2]{Call: call}
+}
+
+type __call0x3[R0, R1, R2 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call0x3[R0, R1, R2]) Return(r0 R0, r1 R1, r2 R2) *__call0x3[R0, R1, R2] {
+	c.Call.Return(r0, r1, r2)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call0x3[R0, R1, R2]) Run(fn func()) *__call0x3[R0, R1, R2] {
+	c.Call.Run(func(args mock.Arguments) {fn()
 	})
 	return c
 }
@@ -781,110 +792,6 @@ func (c *__call2x3[P0, P1, R0, R1, R2]) Run(fn func(P0, P1)) *__call2x3[P0, P1, 
 	return c
 }
 
-// Fn2x4 is a helper function to create a mock for a function that takes 2 parameters and returns 4 values.
-func Fn2x4[P0, P1, R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func(P0, P1) (R0, R1, R2, R3)) __on2x4[P0, P1, R0, R1, R2, R3] {
-	return __on2x4[P0, P1, R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on2x4[P0, P1, R0, R1, R2, R3 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on2x4[P0, P1, R0, R1, R2, R3]) On(p0 P0, p1 P1) *__call2x4[P0, P1, R0, R1, R2, R3] {
-	call := o.mock.On(o.funcName, p0, p1)
-	return &__call2x4[P0, P1, R0, R1, R2, R3]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on2x4[P0, P1, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x4[P0, P1, R0, R1, R2, R3] {
-	call := o.mock.On(o.funcName, p0.match(), p1.match())
-	return &__call2x4[P0, P1, R0, R1, R2, R3]{Call: call}
-}
-
-type __call2x4[P0, P1, R0, R1, R2, R3 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call2x4[P0, P1, R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__call2x4[P0, P1, R0, R1, R2, R3] {
-	c.Call.Return(r0, r1, r2, r3)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call2x4[P0, P1, R0, R1, R2, R3]) Run(fn func(P0, P1)) *__call2x4[P0, P1, R0, R1, R2, R3] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    
-        arg1, ok := args.Get(1).(P1)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
-        }
-	    fn(arg0,arg1)
-	})
-	return c
-}
-
-// Fn2x5 is a helper function to create a mock for a function that takes 2 parameters and returns 5 values.
-func Fn2x5[P0, P1, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0, P1) (R0, R1, R2, R3, R4)) __on2x5[P0, P1, R0, R1, R2, R3, R4] {
-	return __on2x5[P0, P1, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on2x5[P0, P1, R0, R1, R2, R3, R4 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on2x5[P0, P1, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0, p1)
-	return &__call2x5[P0, P1, R0, R1, R2, R3, R4]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on2x5[P0, P1, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0.match(), p1.match())
-	return &__call2x5[P0, P1, R0, R1, R2, R3, R4]{Call: call}
-}
-
-type __call2x5[P0, P1, R0, R1, R2, R3, R4 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call2x5[P0, P1, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
-	c.Call.Return(r0, r1, r2, r3, r4)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call2x5[P0, P1, R0, R1, R2, R3, R4]) Run(fn func(P0, P1)) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    
-        arg1, ok := args.Get(1).(P1)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
-        }
-	    fn(arg0,arg1)
-	})
-	return c
-}
-
 // Fn3x0 is a helper function to create a mock for a function that takes 3 parameters and returns 0 values.
 func Fn3x0[P0, P1, P2 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2)) __on3x0[P0, P1, P2] {
 	return __on3x0[P0, P1, P2]{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -938,6 +845,58 @@ func (c *__call3x0[P0, P1, P2]) Run(fn func(P0, P1, P2)) *__call3x0[P0, P1, P2] 
             panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
         }
 	    fn(arg0,arg1,arg2)
+	})
+	return c
+}
+
+// Fn2x4 is a helper function to create a mock for a function that takes 2 parameters and returns 4 values.
+func Fn2x4[P0, P1, R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func(P0, P1) (R0, R1, R2, R3)) __on2x4[P0, P1, R0, R1, R2, R3] {
+	return __on2x4[P0, P1, R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on2x4[P0, P1, R0, R1, R2, R3 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on2x4[P0, P1, R0, R1, R2, R3]) On(p0 P0, p1 P1) *__call2x4[P0, P1, R0, R1, R2, R3] {
+	call := o.mock.On(o.funcName, p0, p1)
+	return &__call2x4[P0, P1, R0, R1, R2, R3]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on2x4[P0, P1, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x4[P0, P1, R0, R1, R2, R3] {
+	call := o.mock.On(o.funcName, p0.match(), p1.match())
+	return &__call2x4[P0, P1, R0, R1, R2, R3]{Call: call}
+}
+
+type __call2x4[P0, P1, R0, R1, R2, R3 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call2x4[P0, P1, R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__call2x4[P0, P1, R0, R1, R2, R3] {
+	c.Call.Return(r0, r1, r2, r3)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call2x4[P0, P1, R0, R1, R2, R3]) Run(fn func(P0, P1)) *__call2x4[P0, P1, R0, R1, R2, R3] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    
+        arg1, ok := args.Get(1).(P1)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
+        }
+	    fn(arg0,arg1)
 	})
 	return c
 }
@@ -999,12 +958,12 @@ func (c *__call3x1[P0, P1, P2, R0]) Run(fn func(P0, P1, P2)) *__call3x1[P0, P1, 
 	return c
 }
 
-// Fn3x2 is a helper function to create a mock for a function that takes 3 parameters and returns 2 values.
-func Fn3x2[P0, P1, P2, R0, R1 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2) (R0, R1)) __on3x2[P0, P1, P2, R0, R1] {
-	return __on3x2[P0, P1, P2, R0, R1]{funcName: __funcName(fnBeingMocked), mock: mock}
+// Fn2x5 is a helper function to create a mock for a function that takes 2 parameters and returns 5 values.
+func Fn2x5[P0, P1, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0, P1) (R0, R1, R2, R3, R4)) __on2x5[P0, P1, R0, R1, R2, R3, R4] {
+	return __on2x5[P0, P1, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
 }
 
-type __on3x2[P0, P1, P2, R0, R1 any] struct {
+type __on2x5[P0, P1, R0, R1, R2, R3, R4 any] struct {
 	funcName string
 	mock     __testifyMock
 }
@@ -1012,30 +971,30 @@ type __on3x2[P0, P1, P2, R0, R1 any] struct {
 // On is used to specify the exact arguments that the previously specified function should expect to receive.
 // It is a thin wrapper around [mock.Mock.On].
 // If looser argument matching is desired, use Match instead.
-func (o __on3x2[P0, P1, P2, R0, R1]) On(p0 P0, p1 P1, p2 P2) *__call3x2[P0, P1, P2, R0, R1] {
-	call := o.mock.On(o.funcName, p0, p1, p2)
-	return &__call3x2[P0, P1, P2, R0, R1]{Call: call}
+func (o __on2x5[P0, P1, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0, p1)
+	return &__call2x5[P0, P1, R0, R1, R2, R3, R4]{Call: call}
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
 // for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on3x2[P0, P1, P2, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x2[P0, P1, P2, R0, R1] {
-	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
-	return &__call3x2[P0, P1, P2, R0, R1]{Call: call}
+func (o __on2x5[P0, P1, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0.match(), p1.match())
+	return &__call2x5[P0, P1, R0, R1, R2, R3, R4]{Call: call}
 }
 
-type __call3x2[P0, P1, P2, R0, R1 any] struct {
+type __call2x5[P0, P1, R0, R1, R2, R3, R4 any] struct {
 	*mock.Call
 }
 
 // Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call3x2[P0, P1, P2, R0, R1]) Return(r0 R0, r1 R1) *__call3x2[P0, P1, P2, R0, R1] {
-	c.Call.Return(r0, r1)
+func (c *__call2x5[P0, P1, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
+	c.Call.Return(r0, r1, r2, r3, r4)
 	return c
 }
 
 // Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call3x2[P0, P1, P2, R0, R1]) Run(fn func(P0, P1, P2)) *__call3x2[P0, P1, P2, R0, R1] {
+func (c *__call2x5[P0, P1, R0, R1, R2, R3, R4]) Run(fn func(P0, P1)) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
 	c.Call.Run(func(args mock.Arguments) {
         arg0, ok := args.Get(0).(P0)
         if !ok {
@@ -1046,12 +1005,7 @@ func (c *__call3x2[P0, P1, P2, R0, R1]) Run(fn func(P0, P1, P2)) *__call3x2[P0, 
         if !ok {
             panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
         }
-	    
-        arg2, ok := args.Get(2).(P2)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
-        }
-	    fn(arg0,arg1,arg2)
+	    fn(arg0,arg1)
 	})
 	return c
 }
@@ -1093,120 +1047,6 @@ func (c *__call3x3[P0, P1, P2, R0, R1, R2]) Return(r0 R0, r1 R1, r2 R2) *__call3
 
 // Run works the same as [mock.Call.Run], just with strong typing.
 func (c *__call3x3[P0, P1, P2, R0, R1, R2]) Run(fn func(P0, P1, P2)) *__call3x3[P0, P1, P2, R0, R1, R2] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    
-        arg1, ok := args.Get(1).(P1)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
-        }
-	    
-        arg2, ok := args.Get(2).(P2)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
-        }
-	    fn(arg0,arg1,arg2)
-	})
-	return c
-}
-
-// Fn3x4 is a helper function to create a mock for a function that takes 3 parameters and returns 4 values.
-func Fn3x4[P0, P1, P2, R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2) (R0, R1, R2, R3)) __on3x4[P0, P1, P2, R0, R1, R2, R3] {
-	return __on3x4[P0, P1, P2, R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on3x4[P0, P1, P2, R0, R1, R2, R3 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on3x4[P0, P1, P2, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P2) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
-	call := o.mock.On(o.funcName, p0, p1, p2)
-	return &__call3x4[P0, P1, P2, R0, R1, R2, R3]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on3x4[P0, P1, P2, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
-	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
-	return &__call3x4[P0, P1, P2, R0, R1, R2, R3]{Call: call}
-}
-
-type __call3x4[P0, P1, P2, R0, R1, R2, R3 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call3x4[P0, P1, P2, R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
-	c.Call.Return(r0, r1, r2, r3)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call3x4[P0, P1, P2, R0, R1, R2, R3]) Run(fn func(P0, P1, P2)) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
-	c.Call.Run(func(args mock.Arguments) {
-        arg0, ok := args.Get(0).(P0)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
-        }
-	    
-        arg1, ok := args.Get(1).(P1)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
-        }
-	    
-        arg2, ok := args.Get(2).(P2)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
-        }
-	    fn(arg0,arg1,arg2)
-	})
-	return c
-}
-
-// Fn3x5 is a helper function to create a mock for a function that takes 3 parameters and returns 5 values.
-func Fn3x5[P0, P1, P2, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2) (R0, R1, R2, R3, R4)) __on3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
-	return __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
-}
-
-type __on3x5[P0, P1, P2, R0, R1, R2, R3, R4 any] struct {
-	funcName string
-	mock     __testifyMock
-}
-
-// On is used to specify the exact arguments that the previously specified function should expect to receive.
-// It is a thin wrapper around [mock.Mock.On].
-// If looser argument matching is desired, use Match instead.
-func (o __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0, p1, p2)
-	return &__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]{Call: call}
-}
-
-// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
-	return &__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]{Call: call}
-}
-
-type __call3x5[P0, P1, P2, R0, R1, R2, R3, R4 any] struct {
-	*mock.Call
-}
-
-// Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
-	c.Call.Return(r0, r1, r2, r3, r4)
-	return c
-}
-
-// Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Run(fn func(P0, P1, P2)) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
 	c.Call.Run(func(args mock.Arguments) {
         arg0, ok := args.Get(0).(P0)
         if !ok {
@@ -1289,6 +1129,63 @@ func (c *__call4x0[P0, P1, P2, P3]) Run(fn func(P0, P1, P2, P3)) *__call4x0[P0, 
 	return c
 }
 
+// Fn3x2 is a helper function to create a mock for a function that takes 3 parameters and returns 2 values.
+func Fn3x2[P0, P1, P2, R0, R1 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2) (R0, R1)) __on3x2[P0, P1, P2, R0, R1] {
+	return __on3x2[P0, P1, P2, R0, R1]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on3x2[P0, P1, P2, R0, R1 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on3x2[P0, P1, P2, R0, R1]) On(p0 P0, p1 P1, p2 P2) *__call3x2[P0, P1, P2, R0, R1] {
+	call := o.mock.On(o.funcName, p0, p1, p2)
+	return &__call3x2[P0, P1, P2, R0, R1]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on3x2[P0, P1, P2, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x2[P0, P1, P2, R0, R1] {
+	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
+	return &__call3x2[P0, P1, P2, R0, R1]{Call: call}
+}
+
+type __call3x2[P0, P1, P2, R0, R1 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call3x2[P0, P1, P2, R0, R1]) Return(r0 R0, r1 R1) *__call3x2[P0, P1, P2, R0, R1] {
+	c.Call.Return(r0, r1)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call3x2[P0, P1, P2, R0, R1]) Run(fn func(P0, P1, P2)) *__call3x2[P0, P1, P2, R0, R1] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    
+        arg1, ok := args.Get(1).(P1)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
+        }
+	    
+        arg2, ok := args.Get(2).(P2)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
+        }
+	    fn(arg0,arg1,arg2)
+	})
+	return c
+}
+
 // Fn4x1 is a helper function to create a mock for a function that takes 4 parameters and returns 1 values.
 func Fn4x1[P0, P1, P2, P3, R0 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2, P3) (R0)) __on4x1[P0, P1, P2, P3, R0] {
 	return __on4x1[P0, P1, P2, P3, R0]{funcName: __funcName(fnBeingMocked), mock: mock}
@@ -1347,6 +1244,63 @@ func (c *__call4x1[P0, P1, P2, P3, R0]) Run(fn func(P0, P1, P2, P3)) *__call4x1[
             panic(fmt.Sprintf("expected mock argument at index 3 to be of type %T, but got type %T", arg3, args.Get(3)))
         }
 	    fn(arg0,arg1,arg2,arg3)
+	})
+	return c
+}
+
+// Fn3x5 is a helper function to create a mock for a function that takes 3 parameters and returns 5 values.
+func Fn3x5[P0, P1, P2, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2) (R0, R1, R2, R3, R4)) __on3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
+	return __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on3x5[P0, P1, P2, R0, R1, R2, R3, R4 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0, p1, p2)
+	return &__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
+	return &__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]{Call: call}
+}
+
+type __call3x5[P0, P1, P2, R0, R1, R2, R3, R4 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
+	c.Call.Return(r0, r1, r2, r3, r4)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Run(fn func(P0, P1, P2)) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    
+        arg1, ok := args.Get(1).(P1)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
+        }
+	    
+        arg2, ok := args.Get(2).(P2)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
+        }
+	    fn(arg0,arg1,arg2)
 	})
 	return c
 }
@@ -1537,12 +1491,12 @@ func (c *__call4x4[P0, P1, P2, P3, R0, R1, R2, R3]) Run(fn func(P0, P1, P2, P3))
 	return c
 }
 
-// Fn4x5 is a helper function to create a mock for a function that takes 4 parameters and returns 5 values.
-func Fn4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2, P3) (R0, R1, R2, R3, R4)) __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
-	return __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
+// Fn3x4 is a helper function to create a mock for a function that takes 3 parameters and returns 4 values.
+func Fn3x4[P0, P1, P2, R0, R1, R2, R3 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2) (R0, R1, R2, R3)) __on3x4[P0, P1, P2, R0, R1, R2, R3] {
+	return __on3x4[P0, P1, P2, R0, R1, R2, R3]{funcName: __funcName(fnBeingMocked), mock: mock}
 }
 
-type __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any] struct {
+type __on3x4[P0, P1, P2, R0, R1, R2, R3 any] struct {
 	funcName string
 	mock     __testifyMock
 }
@@ -1550,30 +1504,30 @@ type __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any] struct {
 // On is used to specify the exact arguments that the previously specified function should expect to receive.
 // It is a thin wrapper around [mock.Mock.On].
 // If looser argument matching is desired, use Match instead.
-func (o __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2, p3 P3) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0, p1, p2, p3)
-	return &__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{Call: call}
+func (o __on3x4[P0, P1, P2, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P2) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
+	call := o.mock.On(o.funcName, p0, p1, p2)
+	return &__call3x4[P0, P1, P2, R0, R1, R2, R3]{Call: call}
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
 // for the first argument, you can use Match(Anything(), "foo", 1).
-func (o __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
-	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
-	return &__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{Call: call}
+func (o __on3x4[P0, P1, P2, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
+	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
+	return &__call3x4[P0, P1, P2, R0, R1, R2, R3]{Call: call}
 }
 
-type __call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any] struct {
+type __call3x4[P0, P1, P2, R0, R1, R2, R3 any] struct {
 	*mock.Call
 }
 
 // Return works the same as [mock.Call.Return], just with strong typing.
-func (c *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
-	c.Call.Return(r0, r1, r2, r3, r4)
+func (c *__call3x4[P0, P1, P2, R0, R1, R2, R3]) Return(r0 R0, r1 R1, r2 R2, r3 R3) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
+	c.Call.Return(r0, r1, r2, r3)
 	return c
 }
 
 // Run works the same as [mock.Call.Run], just with strong typing.
-func (c *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Run(fn func(P0, P1, P2, P3)) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
+func (c *__call3x4[P0, P1, P2, R0, R1, R2, R3]) Run(fn func(P0, P1, P2)) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
 	c.Call.Run(func(args mock.Arguments) {
         arg0, ok := args.Get(0).(P0)
         if !ok {
@@ -1589,12 +1543,7 @@ func (c *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Run(fn func(P0, P1, P2, 
         if !ok {
             panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
         }
-	    
-        arg3, ok := args.Get(3).(P3)
-        if !ok {
-            panic(fmt.Sprintf("expected mock argument at index 3 to be of type %T, but got type %T", arg3, args.Get(3)))
-        }
-	    fn(arg0,arg1,arg2,arg3)
+	    fn(arg0,arg1,arg2)
 	})
 	return c
 }
@@ -1729,6 +1678,68 @@ func (c *__call5x1[P0, P1, P2, P3, P4, R0]) Run(fn func(P0, P1, P2, P3, P4)) *__
             panic(fmt.Sprintf("expected mock argument at index 4 to be of type %T, but got type %T", arg4, args.Get(4)))
         }
 	    fn(arg0,arg1,arg2,arg3,arg4)
+	})
+	return c
+}
+
+// Fn4x5 is a helper function to create a mock for a function that takes 4 parameters and returns 5 values.
+func Fn4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any](mock __testifyMock, fnBeingMocked func(P0, P1, P2, P3) (R0, R1, R2, R3, R4)) __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
+	return __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any] struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2, p3 P3) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0, p1, p2, p3)
+	return &__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
+	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
+	return &__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{Call: call}
+}
+
+type __call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4 any] struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Return(r0 R0, r1 R1, r2 R2, r3 R3, r4 R4) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
+	c.Call.Return(r0, r1, r2, r3, r4)
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Run(fn func(P0, P1, P2, P3)) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
+	c.Call.Run(func(args mock.Arguments) {
+        arg0, ok := args.Get(0).(P0)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 0 to be of type %T, but got type %T", arg0, args.Get(0)))
+        }
+	    
+        arg1, ok := args.Get(1).(P1)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 1 to be of type %T, but got type %T", arg1, args.Get(1)))
+        }
+	    
+        arg2, ok := args.Get(2).(P2)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 2 to be of type %T, but got type %T", arg2, args.Get(2)))
+        }
+	    
+        arg3, ok := args.Get(3).(P3)
+        if !ok {
+            panic(fmt.Sprintf("expected mock argument at index 3 to be of type %T, but got type %T", arg3, args.Get(3)))
+        }
+	    fn(arg0,arg1,arg2,arg3)
 	})
 	return c
 }
@@ -1999,14 +2010,4 @@ func (c *__call5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]) Run(fn func(P0, P1, 
 	    fn(arg0,arg1,arg2,arg3,arg4)
 	})
 	return c
-}
-func __funcName(methodOrFunc any) string {
-	name := runtime.FuncForPC(reflect.ValueOf(methodOrFunc).Pointer()).Name()
-	lastIndexOfDot := strings.LastIndex(name, ".")
-	name = name[lastIndexOfDot+1:]
-	dashIndex := strings.IndexRune(name, '-')
-	if dashIndex > -1 { // Handles the name of a method on a struct
-		name = name[:dashIndex]
-	}
-	return name
 }
