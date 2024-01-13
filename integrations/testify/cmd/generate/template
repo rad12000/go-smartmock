@@ -4,6 +4,12 @@
     {{end -}}
 {{end -}}
 
+{{define "joinSpread"}}
+    {{- range $idx, $val := .}}
+        {{- if eq $idx (minusOne (len $))}}...{{end}}{{$val}}{{if lt $idx (minusOne (len $))}}, {{end -}}
+    {{end -}}
+{{end -}}
+
 {{define "joinLower"}}
     {{- range $idx, $val := .}}{{toLower $val}}{{if lt $idx (minusOne (len $))}}, {{end}}{{end -}}
 {{end -}}
@@ -27,9 +33,23 @@
     {{end -}}
 {{end -}}
 
+{{define "spreadMethodParams"}}
+    {{- range $idx, $val := .}}
+        {{- toLower $val}} {{if eq $idx (minusOne (len $)) -}}...{{end }}{{toUpper $val -}}
+        {{- if lt $idx (minusOne (len $)) -}}, {{end -}}
+    {{end -}}
+{{end -}}
+
 {{define "matcherMethodParams"}}
     {{- range $idx, $val := .}}
         {{- toLower $val}} matcher[{{toUpper $val -}}]
+        {{- if lt $idx (minusOne (len $)) -}}, {{end -}}
+    {{end -}}
+{{end -}}
+
+{{define "spreadMatcherMethodParams"}}
+    {{- range $idx, $val := .}}
+        {{- toLower $val}} matcher[{{if eq $idx (minusOne (len $)) -}}[]{{end}}{{toUpper $val -}}]
         {{- if lt $idx (minusOne (len $)) -}}, {{end -}}
     {{end -}}
 {{end -}}
@@ -61,8 +81,8 @@ func (fn matcherFunc[T]) match() any {
 	return fn()
 }
 
-// Anything matches any argument of type T, and works in conjunction with Match functions.
-func Anything[T any]() matcher[T] {
+// Any matches any argument of type T, and works in conjunction with Match functions.
+func Any[T any]() matcher[T] {
 	return matcherFunc[T](func() any {
 		var t T
 		return mock.AnythingOfType(fmt.Sprintf("%T", t))
@@ -92,6 +112,72 @@ func __funcName(methodOrFunc any) string {
 func Fn{{template "genericArgsAny" .}}(mock __testifyMock, fnBeingMocked func({{template "join" .GenericParams}}){{if len .GenericReturns}} ({{template "join" .GenericReturns}}){{end}}) __on{{template "genericArgs" .}} {
 	return __on{{template "genericArgs" .}}{funcName: __funcName(fnBeingMocked), mock: mock}
 }
+
+{{if len .GenericParams}}
+// Fn{{len .GenericParams}}x{{len .GenericReturns}} is a helper function to create a mock for a function that takes {{len .GenericParams}} parameters and returns {{len .GenericReturns}} values.
+func FnSpread{{template "genericArgsAny" .}}(mock __testifyMock, fnBeingMocked func({{template "joinSpread" .GenericParams}}){{if len .GenericReturns}} ({{template "join" .GenericReturns}}){{end}}) __onSpread{{template "genericArgs" .}} {
+	return __onSpread{{template "genericArgs" .}}{funcName: __funcName(fnBeingMocked), mock: mock}
+}
+
+type __onSpread{{template "genericArgsAny" .}} struct {
+	funcName string
+	mock     __testifyMock
+}
+
+// Called tells the mock object that a method has been called, and returns the mocked arguments.
+// Panics if the call is unexpected (i.e. not preceded by appropriate .On .Return() calls)
+// If [mock.Call.WaitFor] is set, blocks until the channel is closed or receives a message.
+func (o __onSpread{{template "genericArgs" .}}) Called({{template "spreadMethodParams" .GenericParams}}){{if len .GenericReturns}} ({{template "join" .GenericReturns}}){{end}} {
+	{{if len .GenericReturns}}args := {{end}}o.mock.MethodCalled(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLower" .GenericParams}})
+	{{- range $idx, $val := .GenericReturns}}
+    r{{$idx}}, _ := args.Get({{$idx}}).({{$val}})
+    {{- end -}}
+    {{- if len .GenericReturns}}
+	return {{range $idx, $val := .GenericReturns}}r{{$idx}}{{if lt $idx (minusOne (len $.GenericReturns))}}, {{end}}{{end}}
+	{{- end}}
+}
+
+// On is used to specify the exact arguments that the previously specified function should expect to receive.
+// It is a thin wrapper around [mock.Mock.On].
+// If looser argument matching is desired, use Match instead.
+func (o __onSpread{{template "genericArgs" .}}) On({{template "spreadMethodParams" .GenericParams}}) *__spreadCall{{template "genericArgs" .}} {
+	call := o.mock.On(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLower" .GenericParams}})
+	return &__spreadCall{{template "genericArgs" .}}{Call: call}
+}
+
+// Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
+// for the first argument, you can use Match(Anything(), "foo", 1).
+func (o __onSpread{{template "genericArgs" .}}) Match({{template "spreadMatcherMethodParams" .GenericParams}}) *__spreadCall{{template "genericArgs" .}} {
+	call := o.mock.On(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLowerMatcher" .GenericParams}})
+	return &__spreadCall{{template "genericArgs" .}}{Call: call}
+}
+
+
+type __spreadCall{{template "genericArgsAny" .}} struct {
+	*mock.Call
+}
+
+// Return works the same as [mock.Call.Return], just with strong typing.
+func (c *__spreadCall{{template "genericArgs" .}}) Return({{template "methodParams" .GenericReturns}}) *__spreadCall{{template "genericArgs" .}} {
+	c.Call.Return({{template "joinLower" .GenericReturns}})
+	return c
+}
+
+// Run works the same as [mock.Call.Run], just with strong typing.
+func (c *__spreadCall{{template "genericArgs" .}}) Run(fn func({{template "spreadMethodParams" .GenericParams}})) *__spreadCall{{template "genericArgs" .}} {
+	c.Call.Run(func(args mock.Arguments) {
+	    {{range $idx, $val := .GenericParams -}}
+	    {{- if eq $idx (minusOne (len $.GenericParams)) -}}
+        arg{{$idx}}, _ := args.Get({{$idx}}).([]{{$val}})
+	    {{- else -}}
+        arg{{$idx}}, _ := args.Get({{$idx}}).({{$val}})
+	    {{- end}}
+	    {{end -}}
+		fn({{range $idx, $val := .GenericParams}}arg{{$idx}}{{if lt $idx (minusOne (len $.GenericParams))}}, {{else}}...{{end}}{{end}})
+	})
+	return c
+}
+{{end}}
 
 type __on{{template "genericArgsAny" .}} struct {
 	funcName string
