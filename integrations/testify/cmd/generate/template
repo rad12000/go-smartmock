@@ -48,6 +48,7 @@ import (
 
 type __testifyMock interface {
 	On(methodName string, arguments ...interface{}) *mock.Call
+	MethodCalled(methodName string, arguments ...interface{}) mock.Arguments
 }
 
 type matcher[T any] interface {
@@ -95,6 +96,22 @@ func Fn{{template "genericArgsAny" .}}(mock __testifyMock, fnBeingMocked func({{
 type __on{{template "genericArgsAny" .}} struct {
 	funcName string
 	mock     __testifyMock
+}
+
+// Called tells the mock object that a method has been called, and returns the mocked arguments.
+// Panics if the call is unexpected (i.e. not preceded by appropriate .On .Return() calls)
+// If [mock.Call.WaitFor] is set, blocks until the channel is closed or receives a message.
+func (o __on{{template "genericArgs" .}}) Called({{template "methodParams" .GenericParams}}){{if len .GenericReturns}} ({{template "join" .GenericReturns}}){{end}} {
+	{{if len .GenericReturns}}args := {{end}}o.mock.MethodCalled(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLower" .GenericParams}})
+	{{- range $idx, $val := .GenericReturns}}
+    r{{$idx}}, ok := args.Get({{$idx}}).({{$val}})
+    if !ok {
+        panic(fmt.Sprintf("expected mock return value at index {{$idx}} to be of type %T, but got type %T", r{{$idx}}, args.Get({{$idx}})))
+    }
+    {{end -}}
+    {{- if len .GenericReturns}}
+	return {{range $idx, $val := .GenericReturns}}r{{$idx}}{{if lt $idx (minusOne (len $.GenericReturns))}}, {{end}}{{end -}}
+	{{end}}
 }
 
 // On is used to specify the exact arguments that the previously specified function should expect to receive.
