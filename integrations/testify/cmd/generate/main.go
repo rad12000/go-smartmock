@@ -19,6 +19,9 @@ The flags are:
 	--maxReturn
 		The max return to end at. E.g. if --maxReturn=5 and --minReturn=2, then generated functions would
 		end at 5 and create functions for 2, 3, 4, and 5 return values.
+	--parallel
+		If provided, then the functions will be generated in parallel. This is useful for generating a large
+		number of functions, but will cause the output to be non-deterministic.
 */
 package main
 
@@ -51,6 +54,7 @@ var (
 	minReturn uint
 	maxArg    uint
 	maxReturn uint
+	parallel  bool
 	bufPool   = sync.Pool{New: func() any {
 		return &bytes.Buffer{}
 	}}
@@ -79,6 +83,7 @@ func main() {
 	flag.UintVar(&minReturn, "minReturn", 0, "The minimum number of return arguments to generate.")
 	flag.UintVar(&maxArg, "maxArg", 0, "The max number of arguments to generate.")
 	flag.UintVar(&maxReturn, "maxReturn", 0, "The max number of return arguments to generate.")
+	flag.BoolVar(&parallel, "parallel", false, "Whether or not to generate functions in parallel.")
 	flag.Parse()
 
 	file, err := os.OpenFile(fmt.Sprintf("generated_%s", os.Getenv("GOFILE")), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
@@ -117,13 +122,12 @@ func main() {
 		panic(err)
 	}
 
-	numCPU := runtime.NumCPU() - 1
-	if numCPU < 1 {
-		numCPU = 1
-	}
-
-	if maxArg < 10 && maxReturn < 10 {
-		numCPU = 1
+	numCPU := 1
+	if parallel {
+		numCPU := runtime.NumCPU() - 1
+		if numCPU < 1 {
+			numCPU = 1
+		}
 	}
 
 	ch := make(chan struct{}, numCPU)
