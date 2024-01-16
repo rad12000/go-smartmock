@@ -3,7 +3,7 @@ Generate generates generic mock wrapper functions, based on the flags provided.
 
 Usage:
 
-	gofmt [flags] [path ...]
+	generate [flags]
 
 The flags are:
 
@@ -119,6 +119,10 @@ func main() {
 
 	numCPU := runtime.NumCPU() - 1
 	if numCPU < 1 {
+		numCPU = 1
+	}
+
+	if maxArg < 10 && maxReturn < 10 {
 		numCPU = 1
 	}
 

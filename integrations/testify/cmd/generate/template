@@ -177,7 +177,7 @@ func (c *__spreadCall{{template "genericArgs" .}}) Run(fn func({{template "sprea
 	})
 	return c
 }
-{{end}}
+{{end -}}
 
 type __on{{template "genericArgsAny" .}} struct {
 	funcName string
