@@ -124,7 +124,7 @@ func main() {
 
 	numCPU := 1
 	if parallel {
-		numCPU := runtime.NumCPU() - 1
+		numCPU = runtime.NumCPU() - 1
 		if numCPU < 1 {
 			numCPU = 1
 		}
