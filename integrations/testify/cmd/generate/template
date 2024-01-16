@@ -81,8 +81,17 @@ func (fn matcherFunc[T]) match() any {
 	return fn()
 }
 
-// Any matches any argument of type T, and works in conjunction with Match functions.
+// Any matches any argument, and works in conjunction with Match functions.
+// It uses [mock.Anything] in the background.
 func Any[T any]() matcher[T] {
+	return matcherFunc[T](func() any {
+		return mock.Anything
+	})
+}
+
+// AnyOfType matches any argument of type T, and works in conjunction with Match functions.
+// It uses [mock.AnythingOfType] in the background.
+func AnyOfType[T any]() matcher[T] {
 	return matcherFunc[T](func() any {
 		var t T
 		return mock.AnythingOfType(fmt.Sprintf("%T", t))
