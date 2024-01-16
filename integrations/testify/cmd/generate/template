@@ -73,12 +73,18 @@ type __testifyMock interface {
 
 type matcher[T any] interface {
 	match() any
+	underlying() T
 }
 
 type matcherFunc[T any] func() any
 
 func (fn matcherFunc[T]) match() any {
 	return fn()
+}
+
+func (fn matcherFunc[T]) underlying() T {
+    var t T
+    return t
 }
 
 // Any matches any argument, and works in conjunction with Match functions.
@@ -155,7 +161,7 @@ func (o __onSpread{{template "genericArgs" .}}) On({{template "spreadMethodParam
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread{{template "genericArgs" .}}) Match({{template "spreadMatcherMethodParams" .GenericParams}}) *__spreadCall{{template "genericArgs" .}} {
 	call := o.mock.On(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLowerMatcher" .GenericParams}})
 	return &__spreadCall{{template "genericArgs" .}}{Call: call}
@@ -215,7 +221,7 @@ func (o __on{{template "genericArgs" .}}) On({{template "methodParams" .GenericP
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on{{template "genericArgs" .}}) Match({{template "matcherMethodParams" .GenericParams}}) *__call{{template "genericArgs" .}} {
 	call := o.mock.On(o.funcName{{if len .GenericParams}}, {{end}}{{template "joinLowerMatcher" .GenericParams}})
 	return &__call{{template "genericArgs" .}}{Call: call}

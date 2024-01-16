@@ -18,12 +18,18 @@ type __testifyMock interface {
 
 type matcher[T any] interface {
 	match() any
+	underlying() T
 }
 
 type matcherFunc[T any] func() any
 
 func (fn matcherFunc[T]) match() any {
 	return fn()
+}
+
+func (fn matcherFunc[T]) underlying() T {
+    var t T
+    return t
 }
 
 // Any matches any argument, and works in conjunction with Match functions.
@@ -86,7 +92,7 @@ func (o __on0x0) On() *__call0x0 {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on0x0) Match() *__call0x0 {
 	call := o.mock.On(o.funcName)
 	return &__call0x0{Call: call}
@@ -138,7 +144,7 @@ func (o __on0x1[R0]) On() *__call0x1[R0] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on0x1[R0]) Match() *__call0x1[R0] {
 	call := o.mock.On(o.funcName)
 	return &__call0x1[R0]{Call: call}
@@ -191,7 +197,7 @@ func (o __on0x2[R0, R1]) On() *__call0x2[R0, R1] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on0x2[R0, R1]) Match() *__call0x2[R0, R1] {
 	call := o.mock.On(o.funcName)
 	return &__call0x2[R0, R1]{Call: call}
@@ -245,7 +251,7 @@ func (o __on0x3[R0, R1, R2]) On() *__call0x3[R0, R1, R2] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on0x3[R0, R1, R2]) Match() *__call0x3[R0, R1, R2] {
 	call := o.mock.On(o.funcName)
 	return &__call0x3[R0, R1, R2]{Call: call}
@@ -300,7 +306,7 @@ func (o __on0x4[R0, R1, R2, R3]) On() *__call0x4[R0, R1, R2, R3] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on0x4[R0, R1, R2, R3]) Match() *__call0x4[R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName)
 	return &__call0x4[R0, R1, R2, R3]{Call: call}
@@ -356,7 +362,7 @@ func (o __on0x5[R0, R1, R2, R3, R4]) On() *__call0x5[R0, R1, R2, R3, R4] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on0x5[R0, R1, R2, R3, R4]) Match() *__call0x5[R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName)
 	return &__call0x5[R0, R1, R2, R3, R4]{Call: call}
@@ -412,7 +418,7 @@ func (o __onSpread1x0[P0]) On(p0 ...P0) *__spreadCall1x0[P0] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread1x0[P0]) Match(p0 matcher[[]P0]) *__spreadCall1x0[P0] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__spreadCall1x0[P0]{Call: call}
@@ -458,7 +464,7 @@ func (o __on1x0[P0]) On(p0 P0) *__call1x0[P0] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on1x0[P0]) Match(p0 matcher[P0]) *__call1x0[P0] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__call1x0[P0]{Call: call}
@@ -517,7 +523,7 @@ func (o __onSpread1x1[P0, R0]) On(p0 ...P0) *__spreadCall1x1[P0, R0] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread1x1[P0, R0]) Match(p0 matcher[[]P0]) *__spreadCall1x1[P0, R0] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__spreadCall1x1[P0, R0]{Call: call}
@@ -565,7 +571,7 @@ func (o __on1x1[P0, R0]) On(p0 P0) *__call1x1[P0, R0] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on1x1[P0, R0]) Match(p0 matcher[P0]) *__call1x1[P0, R0] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__call1x1[P0, R0]{Call: call}
@@ -625,7 +631,7 @@ func (o __onSpread1x2[P0, R0, R1]) On(p0 ...P0) *__spreadCall1x2[P0, R0, R1] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread1x2[P0, R0, R1]) Match(p0 matcher[[]P0]) *__spreadCall1x2[P0, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__spreadCall1x2[P0, R0, R1]{Call: call}
@@ -674,7 +680,7 @@ func (o __on1x2[P0, R0, R1]) On(p0 P0) *__call1x2[P0, R0, R1] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on1x2[P0, R0, R1]) Match(p0 matcher[P0]) *__call1x2[P0, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__call1x2[P0, R0, R1]{Call: call}
@@ -735,7 +741,7 @@ func (o __onSpread1x3[P0, R0, R1, R2]) On(p0 ...P0) *__spreadCall1x3[P0, R0, R1,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread1x3[P0, R0, R1, R2]) Match(p0 matcher[[]P0]) *__spreadCall1x3[P0, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__spreadCall1x3[P0, R0, R1, R2]{Call: call}
@@ -785,7 +791,7 @@ func (o __on1x3[P0, R0, R1, R2]) On(p0 P0) *__call1x3[P0, R0, R1, R2] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on1x3[P0, R0, R1, R2]) Match(p0 matcher[P0]) *__call1x3[P0, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__call1x3[P0, R0, R1, R2]{Call: call}
@@ -847,7 +853,7 @@ func (o __onSpread1x4[P0, R0, R1, R2, R3]) On(p0 ...P0) *__spreadCall1x4[P0, R0,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread1x4[P0, R0, R1, R2, R3]) Match(p0 matcher[[]P0]) *__spreadCall1x4[P0, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__spreadCall1x4[P0, R0, R1, R2, R3]{Call: call}
@@ -898,7 +904,7 @@ func (o __on1x4[P0, R0, R1, R2, R3]) On(p0 P0) *__call1x4[P0, R0, R1, R2, R3] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on1x4[P0, R0, R1, R2, R3]) Match(p0 matcher[P0]) *__call1x4[P0, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__call1x4[P0, R0, R1, R2, R3]{Call: call}
@@ -961,7 +967,7 @@ func (o __onSpread1x5[P0, R0, R1, R2, R3, R4]) On(p0 ...P0) *__spreadCall1x5[P0,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread1x5[P0, R0, R1, R2, R3, R4]) Match(p0 matcher[[]P0]) *__spreadCall1x5[P0, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__spreadCall1x5[P0, R0, R1, R2, R3, R4]{Call: call}
@@ -1013,7 +1019,7 @@ func (o __on1x5[P0, R0, R1, R2, R3, R4]) On(p0 P0) *__call1x5[P0, R0, R1, R2, R3
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on1x5[P0, R0, R1, R2, R3, R4]) Match(p0 matcher[P0]) *__call1x5[P0, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match())
 	return &__call1x5[P0, R0, R1, R2, R3, R4]{Call: call}
@@ -1070,7 +1076,7 @@ func (o __onSpread2x0[P0, P1]) On(p0 P0, p1 ...P1) *__spreadCall2x0[P0, P1] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread2x0[P0, P1]) Match(p0 matcher[P0], p1 matcher[[]P1]) *__spreadCall2x0[P0, P1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__spreadCall2x0[P0, P1]{Call: call}
@@ -1117,7 +1123,7 @@ func (o __on2x0[P0, P1]) On(p0 P0, p1 P1) *__call2x0[P0, P1] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on2x0[P0, P1]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x0[P0, P1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__call2x0[P0, P1]{Call: call}
@@ -1177,7 +1183,7 @@ func (o __onSpread2x1[P0, P1, R0]) On(p0 P0, p1 ...P1) *__spreadCall2x1[P0, P1, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread2x1[P0, P1, R0]) Match(p0 matcher[P0], p1 matcher[[]P1]) *__spreadCall2x1[P0, P1, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__spreadCall2x1[P0, P1, R0]{Call: call}
@@ -1226,7 +1232,7 @@ func (o __on2x1[P0, P1, R0]) On(p0 P0, p1 P1) *__call2x1[P0, P1, R0] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on2x1[P0, P1, R0]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x1[P0, P1, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__call2x1[P0, P1, R0]{Call: call}
@@ -1287,7 +1293,7 @@ func (o __onSpread2x2[P0, P1, R0, R1]) On(p0 P0, p1 ...P1) *__spreadCall2x2[P0, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread2x2[P0, P1, R0, R1]) Match(p0 matcher[P0], p1 matcher[[]P1]) *__spreadCall2x2[P0, P1, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__spreadCall2x2[P0, P1, R0, R1]{Call: call}
@@ -1337,7 +1343,7 @@ func (o __on2x2[P0, P1, R0, R1]) On(p0 P0, p1 P1) *__call2x2[P0, P1, R0, R1] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on2x2[P0, P1, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x2[P0, P1, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__call2x2[P0, P1, R0, R1]{Call: call}
@@ -1399,7 +1405,7 @@ func (o __onSpread2x3[P0, P1, R0, R1, R2]) On(p0 P0, p1 ...P1) *__spreadCall2x3[
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread2x3[P0, P1, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[[]P1]) *__spreadCall2x3[P0, P1, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__spreadCall2x3[P0, P1, R0, R1, R2]{Call: call}
@@ -1450,7 +1456,7 @@ func (o __on2x3[P0, P1, R0, R1, R2]) On(p0 P0, p1 P1) *__call2x3[P0, P1, R0, R1,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on2x3[P0, P1, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x3[P0, P1, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__call2x3[P0, P1, R0, R1, R2]{Call: call}
@@ -1513,7 +1519,7 @@ func (o __onSpread2x4[P0, P1, R0, R1, R2, R3]) On(p0 P0, p1 ...P1) *__spreadCall
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread2x4[P0, P1, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[[]P1]) *__spreadCall2x4[P0, P1, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__spreadCall2x4[P0, P1, R0, R1, R2, R3]{Call: call}
@@ -1565,7 +1571,7 @@ func (o __on2x4[P0, P1, R0, R1, R2, R3]) On(p0 P0, p1 P1) *__call2x4[P0, P1, R0,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on2x4[P0, P1, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x4[P0, P1, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__call2x4[P0, P1, R0, R1, R2, R3]{Call: call}
@@ -1629,7 +1635,7 @@ func (o __onSpread2x5[P0, P1, R0, R1, R2, R3, R4]) On(p0 P0, p1 ...P1) *__spread
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread2x5[P0, P1, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[[]P1]) *__spreadCall2x5[P0, P1, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__spreadCall2x5[P0, P1, R0, R1, R2, R3, R4]{Call: call}
@@ -1682,7 +1688,7 @@ func (o __on2x5[P0, P1, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1) *__call2x5[P0, P1,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on2x5[P0, P1, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1]) *__call2x5[P0, P1, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match())
 	return &__call2x5[P0, P1, R0, R1, R2, R3, R4]{Call: call}
@@ -1740,7 +1746,7 @@ func (o __onSpread3x0[P0, P1, P2]) On(p0 P0, p1 P1, p2 ...P2) *__spreadCall3x0[P
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread3x0[P0, P1, P2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[[]P2]) *__spreadCall3x0[P0, P1, P2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__spreadCall3x0[P0, P1, P2]{Call: call}
@@ -1788,7 +1794,7 @@ func (o __on3x0[P0, P1, P2]) On(p0 P0, p1 P1, p2 P2) *__call3x0[P0, P1, P2] {
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on3x0[P0, P1, P2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x0[P0, P1, P2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__call3x0[P0, P1, P2]{Call: call}
@@ -1849,7 +1855,7 @@ func (o __onSpread3x1[P0, P1, P2, R0]) On(p0 P0, p1 P1, p2 ...P2) *__spreadCall3
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread3x1[P0, P1, P2, R0]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[[]P2]) *__spreadCall3x1[P0, P1, P2, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__spreadCall3x1[P0, P1, P2, R0]{Call: call}
@@ -1899,7 +1905,7 @@ func (o __on3x1[P0, P1, P2, R0]) On(p0 P0, p1 P1, p2 P2) *__call3x1[P0, P1, P2, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on3x1[P0, P1, P2, R0]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x1[P0, P1, P2, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__call3x1[P0, P1, P2, R0]{Call: call}
@@ -1961,7 +1967,7 @@ func (o __onSpread3x2[P0, P1, P2, R0, R1]) On(p0 P0, p1 P1, p2 ...P2) *__spreadC
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread3x2[P0, P1, P2, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[[]P2]) *__spreadCall3x2[P0, P1, P2, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__spreadCall3x2[P0, P1, P2, R0, R1]{Call: call}
@@ -2012,7 +2018,7 @@ func (o __on3x2[P0, P1, P2, R0, R1]) On(p0 P0, p1 P1, p2 P2) *__call3x2[P0, P1, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on3x2[P0, P1, P2, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x2[P0, P1, P2, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__call3x2[P0, P1, P2, R0, R1]{Call: call}
@@ -2075,7 +2081,7 @@ func (o __onSpread3x3[P0, P1, P2, R0, R1, R2]) On(p0 P0, p1 P1, p2 ...P2) *__spr
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread3x3[P0, P1, P2, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[[]P2]) *__spreadCall3x3[P0, P1, P2, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__spreadCall3x3[P0, P1, P2, R0, R1, R2]{Call: call}
@@ -2127,7 +2133,7 @@ func (o __on3x3[P0, P1, P2, R0, R1, R2]) On(p0 P0, p1 P1, p2 P2) *__call3x3[P0, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on3x3[P0, P1, P2, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x3[P0, P1, P2, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__call3x3[P0, P1, P2, R0, R1, R2]{Call: call}
@@ -2191,7 +2197,7 @@ func (o __onSpread3x4[P0, P1, P2, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 ...P2) *_
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread3x4[P0, P1, P2, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[[]P2]) *__spreadCall3x4[P0, P1, P2, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__spreadCall3x4[P0, P1, P2, R0, R1, R2, R3]{Call: call}
@@ -2244,7 +2250,7 @@ func (o __on3x4[P0, P1, P2, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P2) *__call3x4[
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on3x4[P0, P1, P2, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x4[P0, P1, P2, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__call3x4[P0, P1, P2, R0, R1, R2, R3]{Call: call}
@@ -2309,7 +2315,7 @@ func (o __onSpread3x5[P0, P1, P2, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 ...P2
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[[]P2]) *__spreadCall3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__spreadCall3x5[P0, P1, P2, R0, R1, R2, R3, R4]{Call: call}
@@ -2363,7 +2369,7 @@ func (o __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2) *__call
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on3x5[P0, P1, P2, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2]) *__call3x5[P0, P1, P2, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match())
 	return &__call3x5[P0, P1, P2, R0, R1, R2, R3, R4]{Call: call}
@@ -2422,7 +2428,7 @@ func (o __onSpread4x0[P0, P1, P2, P3]) On(p0 P0, p1 P1, p2 P2, p3 ...P3) *__spre
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread4x0[P0, P1, P2, P3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[[]P3]) *__spreadCall4x0[P0, P1, P2, P3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__spreadCall4x0[P0, P1, P2, P3]{Call: call}
@@ -2471,7 +2477,7 @@ func (o __on4x0[P0, P1, P2, P3]) On(p0 P0, p1 P1, p2 P2, p3 P3) *__call4x0[P0, P
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on4x0[P0, P1, P2, P3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x0[P0, P1, P2, P3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__call4x0[P0, P1, P2, P3]{Call: call}
@@ -2533,7 +2539,7 @@ func (o __onSpread4x1[P0, P1, P2, P3, R0]) On(p0 P0, p1 P1, p2 P2, p3 ...P3) *__
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread4x1[P0, P1, P2, P3, R0]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[[]P3]) *__spreadCall4x1[P0, P1, P2, P3, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__spreadCall4x1[P0, P1, P2, P3, R0]{Call: call}
@@ -2584,7 +2590,7 @@ func (o __on4x1[P0, P1, P2, P3, R0]) On(p0 P0, p1 P1, p2 P2, p3 P3) *__call4x1[P
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on4x1[P0, P1, P2, P3, R0]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x1[P0, P1, P2, P3, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__call4x1[P0, P1, P2, P3, R0]{Call: call}
@@ -2647,7 +2653,7 @@ func (o __onSpread4x2[P0, P1, P2, P3, R0, R1]) On(p0 P0, p1 P1, p2 P2, p3 ...P3)
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread4x2[P0, P1, P2, P3, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[[]P3]) *__spreadCall4x2[P0, P1, P2, P3, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__spreadCall4x2[P0, P1, P2, P3, R0, R1]{Call: call}
@@ -2699,7 +2705,7 @@ func (o __on4x2[P0, P1, P2, P3, R0, R1]) On(p0 P0, p1 P1, p2 P2, p3 P3) *__call4
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on4x2[P0, P1, P2, P3, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x2[P0, P1, P2, P3, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__call4x2[P0, P1, P2, P3, R0, R1]{Call: call}
@@ -2763,7 +2769,7 @@ func (o __onSpread4x3[P0, P1, P2, P3, R0, R1, R2]) On(p0 P0, p1 P1, p2 P2, p3 ..
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread4x3[P0, P1, P2, P3, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[[]P3]) *__spreadCall4x3[P0, P1, P2, P3, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__spreadCall4x3[P0, P1, P2, P3, R0, R1, R2]{Call: call}
@@ -2816,7 +2822,7 @@ func (o __on4x3[P0, P1, P2, P3, R0, R1, R2]) On(p0 P0, p1 P1, p2 P2, p3 P3) *__c
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on4x3[P0, P1, P2, P3, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x3[P0, P1, P2, P3, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__call4x3[P0, P1, P2, P3, R0, R1, R2]{Call: call}
@@ -2881,7 +2887,7 @@ func (o __onSpread4x4[P0, P1, P2, P3, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P2, p
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread4x4[P0, P1, P2, P3, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[[]P3]) *__spreadCall4x4[P0, P1, P2, P3, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__spreadCall4x4[P0, P1, P2, P3, R0, R1, R2, R3]{Call: call}
@@ -2935,7 +2941,7 @@ func (o __on4x4[P0, P1, P2, P3, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P2, p3 P3) 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on4x4[P0, P1, P2, P3, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x4[P0, P1, P2, P3, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__call4x4[P0, P1, P2, P3, R0, R1, R2, R3]{Call: call}
@@ -3001,7 +3007,7 @@ func (o __onSpread4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[[]P3]) *__spreadCall4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__spreadCall4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{Call: call}
@@ -3056,7 +3062,7 @@ func (o __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2, p3 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3]) *__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match())
 	return &__call4x5[P0, P1, P2, P3, R0, R1, R2, R3, R4]{Call: call}
@@ -3116,7 +3122,7 @@ func (o __onSpread5x0[P0, P1, P2, P3, P4]) On(p0 P0, p1 P1, p2 P2, p3 P3, p4 ...
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread5x0[P0, P1, P2, P3, P4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[[]P4]) *__spreadCall5x0[P0, P1, P2, P3, P4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__spreadCall5x0[P0, P1, P2, P3, P4]{Call: call}
@@ -3166,7 +3172,7 @@ func (o __on5x0[P0, P1, P2, P3, P4]) On(p0 P0, p1 P1, p2 P2, p3 P3, p4 P4) *__ca
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on5x0[P0, P1, P2, P3, P4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[P4]) *__call5x0[P0, P1, P2, P3, P4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__call5x0[P0, P1, P2, P3, P4]{Call: call}
@@ -3229,7 +3235,7 @@ func (o __onSpread5x1[P0, P1, P2, P3, P4, R0]) On(p0 P0, p1 P1, p2 P2, p3 P3, p4
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread5x1[P0, P1, P2, P3, P4, R0]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[[]P4]) *__spreadCall5x1[P0, P1, P2, P3, P4, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__spreadCall5x1[P0, P1, P2, P3, P4, R0]{Call: call}
@@ -3281,7 +3287,7 @@ func (o __on5x1[P0, P1, P2, P3, P4, R0]) On(p0 P0, p1 P1, p2 P2, p3 P3, p4 P4) *
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on5x1[P0, P1, P2, P3, P4, R0]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[P4]) *__call5x1[P0, P1, P2, P3, P4, R0] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__call5x1[P0, P1, P2, P3, P4, R0]{Call: call}
@@ -3345,7 +3351,7 @@ func (o __onSpread5x2[P0, P1, P2, P3, P4, R0, R1]) On(p0 P0, p1 P1, p2 P2, p3 P3
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread5x2[P0, P1, P2, P3, P4, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[[]P4]) *__spreadCall5x2[P0, P1, P2, P3, P4, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__spreadCall5x2[P0, P1, P2, P3, P4, R0, R1]{Call: call}
@@ -3398,7 +3404,7 @@ func (o __on5x2[P0, P1, P2, P3, P4, R0, R1]) On(p0 P0, p1 P1, p2 P2, p3 P3, p4 P
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on5x2[P0, P1, P2, P3, P4, R0, R1]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[P4]) *__call5x2[P0, P1, P2, P3, P4, R0, R1] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__call5x2[P0, P1, P2, P3, P4, R0, R1]{Call: call}
@@ -3463,7 +3469,7 @@ func (o __onSpread5x3[P0, P1, P2, P3, P4, R0, R1, R2]) On(p0 P0, p1 P1, p2 P2, p
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread5x3[P0, P1, P2, P3, P4, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[[]P4]) *__spreadCall5x3[P0, P1, P2, P3, P4, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__spreadCall5x3[P0, P1, P2, P3, P4, R0, R1, R2]{Call: call}
@@ -3517,7 +3523,7 @@ func (o __on5x3[P0, P1, P2, P3, P4, R0, R1, R2]) On(p0 P0, p1 P1, p2 P2, p3 P3, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on5x3[P0, P1, P2, P3, P4, R0, R1, R2]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[P4]) *__call5x3[P0, P1, P2, P3, P4, R0, R1, R2] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__call5x3[P0, P1, P2, P3, P4, R0, R1, R2]{Call: call}
@@ -3583,7 +3589,7 @@ func (o __onSpread5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[[]P4]) *__spreadCall5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__spreadCall5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3]{Call: call}
@@ -3638,7 +3644,7 @@ func (o __on5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3]) On(p0 P0, p1 P1, p2 P2, p3 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[P4]) *__call5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__call5x4[P0, P1, P2, P3, P4, R0, R1, R2, R3]{Call: call}
@@ -3705,7 +3711,7 @@ func (o __onSpread5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, 
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __onSpread5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[[]P4]) *__spreadCall5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__spreadCall5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]{Call: call}
@@ -3761,7 +3767,7 @@ func (o __on5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]) On(p0 P0, p1 P1, p2 P2,
 }
 
 // Match functions similarly to On, but allows for looser argument matching. For example, if you want to match any string
-// for the first argument, you can use Match(Anything(), "foo", 1).
+// for the first argument, you can use Match(AnyOfType[string](), Eq("some string"), Eq(1)).
 func (o __on5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]) Match(p0 matcher[P0], p1 matcher[P1], p2 matcher[P2], p3 matcher[P3], p4 matcher[P4]) *__call5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4] {
 	call := o.mock.On(o.funcName, p0.match(), p1.match(), p2.match(), p3.match(), p4.match())
 	return &__call5x5[P0, P1, P2, P3, P4, R0, R1, R2, R3, R4]{Call: call}
