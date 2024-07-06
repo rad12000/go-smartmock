@@ -56,6 +56,14 @@ func Eq[T any](v T) matcher[T] {
 	})
 }
 
+// Func provides a matcher that matches its argument using the provided match function.
+// If the function returns true, it matches. Otherwise, it doesn't. It uses mock.MatchedBy under the hood.
+func Func[T any](matchFunc func(value T) bool) matcher[T] {
+	return matcherFunc[T](func() any {
+		return mock.MatchedBy(matchFunc)
+	})
+}
+
 func __funcName(methodOrFunc any) string {
 	name := runtime.FuncForPC(reflect.ValueOf(methodOrFunc).Pointer()).Name()
 	lastIndexOfDot := strings.LastIndex(name, ".")
