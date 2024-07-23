@@ -2,7 +2,7 @@ module github.com/rad12000/go-smartmock/integrations/testify
 
 go 1.19
 
-require github.com/stretchr/testify v1.9.0
+require github.com/stretchr/testify v1.8.4 // This version needs to be changed very cautiously
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
