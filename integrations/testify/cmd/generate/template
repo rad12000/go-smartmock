@@ -108,13 +108,11 @@ func AnyOfType[T any]() matcher[T] {
 // This function works in conjunction with Match functions.
 // It uses [mock.AnythingOfType] in the background.
 func OfConcreteType[T, C any]() matcher[T] {
-	var (
-		c C
-	 	t T
-		cType = reflect.TypeOf(c)
-	)
+	var c C
 
-	if !cType.Implements(reflect.TypeOf(t)) {
+	switch any(c).(type) {
+	case T:
+	default:
 		panic(fmt.Sprintf("concrete type %T does not implement interface of type %T", c, t))
 	}
 
