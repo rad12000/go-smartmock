@@ -58,6 +58,7 @@ func OfConcreteType[T, C any]() matcher[T] {
 	switch any(c).(type) {
 	case T:
 	default:
+	    var t T
 		panic(fmt.Sprintf("concrete type %T does not implement interface of type %T", c, t))
 	}
 
