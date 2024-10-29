@@ -104,6 +104,25 @@ func AnyOfType[T any]() matcher[T] {
 	})
 }
 
+// OfConcreteType matches any argument of type T (where T is an interface), validating that the concrete type of the argument provided is of type U.
+// This function works in conjunction with Match functions.
+// It uses [mock.AnythingOfType] in the background.
+func OfConcreteType[T, C any]() matcher[T] {
+	var (
+		c C
+	 	t T
+		cType = reflect.TypeOf(c)
+	)
+
+	if !cType.Implements(reflect.TypeOf(t)) {
+		panic(fmt.Sprintf("concrete type %T does not implement interface of type %T", c, t))
+	}
+
+	return matcherFunc[T](func() any {
+		return mock.AnythingOfType(fmt.Sprintf("%T", c))
+	})
+}
+
 // Eq uses the provided value to match the actual value of type T, and works in conjunction with Match functions.
 func Eq[T any](v T) matcher[T] {
 	return matcherFunc[T](func() any {
